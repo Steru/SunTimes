@@ -33,7 +33,7 @@ class SunRepository {
         val msg = when (e) {
             is HttpException -> "Http error ${e.code()}"
             is SocketTimeoutException -> "Socket timeout error"
-            else -> "Unknown error. Are you doing something suspicious?"
+            else -> "Unknown error ${e.message} \nAre you doing something suspicious?"
         }
 
         return Resource.error(msg)

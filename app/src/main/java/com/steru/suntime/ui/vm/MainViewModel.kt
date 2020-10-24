@@ -11,6 +11,6 @@ class MainViewModel : ViewModel() {
 
     val sunData = liveData(Dispatchers.IO) {
         emit(Resource.loading())
-        emit(sunRepository.getSunriseSunsetTimes(50f, 20f))
+        emit(sunRepository.getSunriseSunsetTimes(51f,17f))
     }
 }
