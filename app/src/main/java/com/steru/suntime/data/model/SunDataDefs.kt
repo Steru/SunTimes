@@ -23,3 +23,9 @@ data class SunData(
     @SerializedName("civil_twighlight_end")
     val civilTwilightEnd: String
 )
+
+/**
+ * Sun data class in user-friendly format
+ */
+data class FormattedSunData(val sunrise: String,
+                            val sunset: String)
