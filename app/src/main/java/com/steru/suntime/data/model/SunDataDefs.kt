@@ -27,5 +27,8 @@ data class SunData(
 /**
  * Sun data class in user-friendly format
  */
-data class FormattedSunData(val sunrise: String,
-                            val sunset: String)
+data class FormattedSunData(
+    val date: String,
+    val sunrise: String,
+    val sunset: String
+)

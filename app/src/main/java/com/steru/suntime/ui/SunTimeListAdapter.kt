@@ -24,6 +24,7 @@ class SunTimeListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
 
+        holder.dateText.text = item.date
         holder.sunriseText.text = item.sunrise
         holder.sunsetText.text = item.sunset
     }
@@ -31,6 +32,7 @@ class SunTimeListAdapter(
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val dateText: TextView = view.findViewById(R.id.date_text)
         val sunriseText: TextView = view.findViewById(R.id.sunrise_text)
         val sunsetText: TextView = view.findViewById(R.id.sunset_text)
 

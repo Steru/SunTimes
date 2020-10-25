@@ -11,9 +11,9 @@ class MainViewModel : ViewModel() {
     private val sunRepository = SunRepository()
 
     val sunDataList = arrayListOf(
-            FormattedSunData("1", "1"),
-            FormattedSunData("2", "1"),
-            FormattedSunData("3", "1")
+            FormattedSunData("10.01","1", "1"),
+            FormattedSunData("10.02","2", "1"),
+            FormattedSunData("10.03","3", "1")
     )
 
     val sunData = liveData(Dispatchers.IO) {
