@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SunTime</string>
+    <string name="fetching_error">Error! %s</string>
 </resources>
