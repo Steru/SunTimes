@@ -42,8 +42,7 @@ class DateListFragment : Fragment() {
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter = SunTimeListAdapter(
             viewModel.sunDataList,
-            viewLifecycleOwner,
-            lifecycleScope)
+            context)
 
     }
 }

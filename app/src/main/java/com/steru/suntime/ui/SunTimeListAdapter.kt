@@ -1,12 +1,12 @@
 package com.steru.suntime.ui
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.LifecycleOwner
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.steru.suntime.R
 import com.steru.suntime.data.model.FormattedSunData
@@ -14,15 +14,17 @@ import com.steru.suntime.data.model.SunData
 import com.steru.suntime.ui.utils.Resource
 import com.steru.suntime.ui.utils.ResourceStatus.*
 import com.steru.suntime.ui.utils.TimeFormatter
+import java.time.LocalDate
 
 /**
  * [RecyclerView.Adapter] that can display a [FormattedSunData].
  */
 class SunTimeListAdapter(
     private val values: MutableList<Resource<SunData>>,
-    private val lifecycleOwner: LifecycleOwner,
-    private val lifecycleScope: LifecycleCoroutineScope
+    private val context: Context?
 ) : RecyclerView.Adapter<SunTimeListAdapter.ViewHolder>() {
+
+    private val timeFormatter = TimeFormatter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -46,20 +48,33 @@ class SunTimeListAdapter(
 
     private fun setViewValues(data: SunData?, holder: ViewHolder) {
         holder.spinner.visibility = View.GONE
-        data?.apply {
-            val formatter = TimeFormatter()
-
+        data?.let {
             // every value contains date
-            holder.dateText.text = formatter.formatFullDateTimeToDate(sunrise)
-            holder.sunriseText.text = formatter.formatTo24hLocalTime(sunrise)
-            holder.sunsetText.text = formatter.formatTo24hLocalTime(sunset)
+            val date = timeFormatter.formatFullDateTimeToDate(it.sunrise)
+            holder.dateText.text = date
+            holder.sunriseText.text = timeFormatter.formatTo24hLocalTime(it.sunrise)
+            holder.sunsetText.text = timeFormatter.formatTo24hLocalTime(it.sunset)
+
+            setupTodayHighlight(holder, date)
+        }
+    }
+
+    private fun setupTodayHighlight(
+        holder: ViewHolder,
+        dateString: String?
+    ) {
+        // todo keep the time values as time formats, not Strings to avoid parsing every time
+        if (LocalDate.from(timeFormatter.dateFormat.parse(dateString)) == LocalDate.now()) {
+            context?.let {
+                holder.itemView.background =
+                    ContextCompat.getDrawable(context, R.drawable.selected_rectangle)
+            }
         }
     }
 
     private fun setErrorState(message: String?, holder: ViewHolder) {
         holder.spinner.visibility = View.GONE
-        // todo extract to string resource
-        holder.errorText.text = "Error! $message"
+        holder.errorText.text = context?.getString(R.string.fetching_error, message)
     }
 
     override fun getItemCount(): Int = values.size
