@@ -34,6 +34,10 @@ class DateListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        viewModel.itemUpdated.observe(viewLifecycleOwner, {
+            recyclerView?.adapter?.notifyItemChanged(it)
+        })
+
         recyclerView = view.findViewById(R.id.sunTimeList)
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter = SunTimeListAdapter(

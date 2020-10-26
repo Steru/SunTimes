@@ -7,7 +7,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.steru.suntime.R
 import com.steru.suntime.data.model.FormattedSunData
@@ -15,14 +14,12 @@ import com.steru.suntime.data.model.SunData
 import com.steru.suntime.ui.utils.Resource
 import com.steru.suntime.ui.utils.ResourceStatus.*
 import com.steru.suntime.ui.utils.TimeFormatter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * [RecyclerView.Adapter] that can display a [FormattedSunData].
  */
 class SunTimeListAdapter(
-    private val values: MutableList<LiveData<Resource<SunData>>>,
+    private val values: MutableList<Resource<SunData>>,
     private val lifecycleOwner: LifecycleOwner,
     private val lifecycleScope: LifecycleCoroutineScope
 ) : RecyclerView.Adapter<SunTimeListAdapter.ViewHolder>() {
@@ -34,20 +31,13 @@ class SunTimeListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val data = values[position]
+        val resource = values[position]
 
-        data.observe(lifecycleOwner, {
-            lifecycleScope.launch(Dispatchers.Main) {
-                notifyItemChanged(position)
-            }
-
-            when (it.status) {
-                SUCCESS -> setViewValues(it.data, holder)
-                ERROR -> setErrorState(it.message, holder)
-                LOADING -> setLoadingState(holder)
-            }
-        })
-
+        when (resource.status) {
+            SUCCESS -> setViewValues(resource.data, holder)
+            ERROR -> setErrorState(resource.message, holder)
+            LOADING -> setLoadingState(holder)
+        }
     }
 
     private fun setLoadingState(holder: ViewHolder) {

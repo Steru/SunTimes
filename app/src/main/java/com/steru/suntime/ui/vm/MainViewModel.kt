@@ -1,8 +1,7 @@
 package com.steru.suntime.ui.vm
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.steru.suntime.data.model.SunData
 import com.steru.suntime.data.repository.SunRepository
@@ -10,8 +9,9 @@ import com.steru.suntime.ui.utils.Resource
 import com.steru.suntime.ui.utils.TimeFormatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.ext.getScopeName
 import java.time.LocalDate
-import kotlin.collections.ArrayList
+
 
 /**
  * Range of plus/minus days that days list should contain
@@ -25,8 +25,12 @@ class MainViewModel : ViewModel() {
     /**
      * List containing LiveData with Sun server responses.
      */
-    val sunDataList: ArrayList<LiveData<Resource<SunData>>> = ArrayList()
+    val sunDataList: ArrayList<Resource<SunData>> = ArrayList()
 
+    /**
+     * LiveData notifying the view that given item value was updated
+     */
+    val itemUpdated: MutableLiveData<Int> = MutableLiveData()
 
     private val sunRepository = SunRepository()
     private val dateList: ArrayList<LocalDate>
@@ -34,25 +38,35 @@ class MainViewModel : ViewModel() {
 
     init {
         dateList = getDatesRange(LocalDate.now())
-        val dateFormatter = TimeFormatter().dateFormat
 
+        repeat(dateList.size) {
+            sunDataList.add(Resource.loading())
+        }
+
+        fetchDataForDateRange()
+    }
+
+    private fun fetchDataForDateRange() {
         viewModelScope.launch {
-            for (date in dateList) {
-                sunDataList.add(
-                    liveData(Dispatchers.IO) {
-                        emit(Resource.loading())
-
-                        emit(
-                            sunRepository.getSunriseSunsetTimes(
-                                date.format(dateFormatter),
-                                // hardcoded Wrocław location for now
-                                51f,
-                                17f
-                            )
-                        )
-                    })
+            for (i in 0 until dateList.size) {
+                launch(Dispatchers.IO) {
+                    this.getScopeName()
+                    fetchDataAndNotify(i, dateList[i])
+                }
             }
         }
+    }
+
+    private suspend fun fetchDataAndNotify(i: Int, date: LocalDate) {
+        val dateFormatter = TimeFormatter().dateFormat
+
+        sunDataList[i] = sunRepository.getSunriseSunsetTimes(
+            date.format(dateFormatter),
+            // hardcoded Wrocław location for now
+            51f,
+            17f
+        )
+        itemUpdated.postValue(i)
     }
 
     private fun getDatesRange(today: LocalDate): ArrayList<LocalDate> {
