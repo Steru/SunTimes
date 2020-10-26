@@ -20,9 +20,9 @@ class SunRepository {
      *
      * @return Resource containing the data
      */
-    suspend fun getSunriseSunsetTimes(latitude: Float, longitude: Float) : Resource<SunData> {
+    suspend fun getSunriseSunsetTimes(date: String, latitude: Float, longitude: Float) : Resource<SunData> {
         return try {
-            val response = retrofitClient.getTimes(latitude, longitude).results
+            val response = retrofitClient.getTimes(latitude, longitude, date).results
             Resource.success(response)
         } catch (e: Exception) {
             handleException(e)

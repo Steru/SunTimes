@@ -19,6 +19,7 @@ interface SunService {
     suspend fun getTimes(
         @Query("lat") latitude: Float,
         @Query("lng") longitude: Float,
+        @Query("date") date: String,
         @Query("formatted") formatted: Int = 0
     ) : SunResponse
 }

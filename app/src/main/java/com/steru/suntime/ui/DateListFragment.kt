@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.steru.suntime.R
@@ -33,17 +34,16 @@ class DateListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        viewModel.itemUpdated.observe(viewLifecycleOwner, {
+            recyclerView?.adapter?.notifyItemChanged(it)
+        })
+
         recyclerView = view.findViewById(R.id.sunTimeList)
         recyclerView?.layoutManager = LinearLayoutManager(context)
-        recyclerView?.adapter = SunTimeListAdapter(viewModel.sunDataList)
+        recyclerView?.adapter = SunTimeListAdapter(
+            viewModel.sunDataList,
+            viewLifecycleOwner,
+            lifecycleScope)
 
-//        viewModel.sunData.observe(this, { resource ->
-//
-//            when (resource.status) {
-//                ResourceStatus.SUCCESS -> handleSuccessfulResource(resource)
-//                ResourceStatus.ERROR -> "ERROR! ${resource.message}"
-//                ResourceStatus.LOADING -> "Wait for it..."
-//            }
-//        })
     }
 }
