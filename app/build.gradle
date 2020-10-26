@@ -24,10 +24,13 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 }
 
 dependencies {
+    // desugaring to use Java 8 for java.time
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
