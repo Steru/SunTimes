@@ -16,10 +16,13 @@ import java.time.LocalDate
 /**
  * Range of plus/minus days that days list should contain
  */
-const val DAYS_LIST_RANGE = 10
+const val DAYS_LIST_RANGE = 8
 
-
+/**
+ * ViewModel class handling fetching of data, main list date range and outputting the sun data list
+ */
 class MainViewModel : ViewModel() {
+    // todo use Koin to extract repository as parameter and test the vm
 
     // outputs
     /**
