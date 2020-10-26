@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sunTimeList"
+        android:name="com.steru.suntime.ui.DatesListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/padding_default"
+        android:layout_marginRight="@dimen/padding_default"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".ui.DateListFragment"
+        tools:listitem="@layout/fragment_sun_list_item" />
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
