@@ -21,7 +21,7 @@ const val DAYS_LIST_RANGE = 8
 /**
  * ViewModel class handling fetching of data, main list date range and outputting the sun data list
  */
-class MainViewModel : ViewModel() {
+class MainViewModel(private val sunRepository: SunRepository) : ViewModel() {
     // todo use Koin to extract repository as parameter and test the vm
 
     // outputs
@@ -35,7 +35,6 @@ class MainViewModel : ViewModel() {
      */
     val itemUpdated: MutableLiveData<Int> = MutableLiveData()
 
-    private val sunRepository = SunRepository()
     private val dateList: ArrayList<LocalDate>
 
 
