@@ -22,8 +22,6 @@ const val DAYS_LIST_RANGE = 8
  * ViewModel class handling fetching of data, main list date range and outputting the sun data list
  */
 class MainViewModel(private val sunRepository: SunRepository) : ViewModel() {
-    // todo use Koin to extract repository as parameter and test the vm
-
     // outputs
     /**
      * List containing LiveData with Sun server responses.
