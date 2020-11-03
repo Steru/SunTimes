@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.steru.suntime.R
 import com.steru.suntime.ui.vm.MainViewModel
+import org.koin.androidx.viewmodel.compat.ScopeCompat.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A fragment representing a list of Items.
@@ -18,6 +20,8 @@ import com.steru.suntime.ui.vm.MainViewModel
 class DateListFragment : Fragment() {
 
     private var recyclerView: RecyclerView? = null
+
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +36,6 @@ class DateListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         viewModel.itemUpdated.observe(viewLifecycleOwner, {
             recyclerView?.adapter?.notifyItemChanged(it)
